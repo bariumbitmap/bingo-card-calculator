@@ -1,0 +1,7 @@
+- [ ] Round to *n* sig figs
+- [ ] Save to JSON
+- [ ] Load from JSON
+- [ ] Save to CSV / TSV
+- [ ] Fill blank squares with Weird Al predictions
+- [ ] Button to Shift / Permute
+- [ ] Button to Shuffle
