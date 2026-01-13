@@ -20,29 +20,67 @@ const numericInputCells = [
   "B4", "I4", "N4", "G4", "O4",
   "B5", "I5", "N5", "G5", "O5",
 ];
+const textInputCells = [
+  "B1text", "I1text", "N1text", "G1text", "O1text",
+  "B2text", "I2text", "N2text", "G2text", "O2text",
+  "B3text", "I3text", "N3text", "G3text", "O3text",
+  "B4text", "I4text", "N4text", "G4text", "O4text",
+  "B5text", "I5text", "N5text", "G5text", "O5text",
+];
 
-function handleFormKeyDown(event) {
-  // Do nothing for now
+function saveStatetoURL() {
+  var allIDs = textInputCells.concat(numericInputCells);
+  var cellState = {};
+  for (var i = 0; i < allIDs.length; i++) {
+    var ID = allIDs[i];
+    var elem = document.getElementById(ID);
+    if (elem == null) {
+      console.log("Error: Could not get ID: '" + ID + "'");
+    } else {
+      cellState[ID] = elem.value;
+    }
+  }
+  var payload = {
+    "cellState": cellState
+  }
+  var payloadStr = JSON.stringify(payload);
+  window.location.hash = '#' + encodeURIComponent(payloadStr);
 }
 
-function handleFormKeyUp(event) {
+function changeTextInputCell(event) {
+  saveStatetoURL();
+}
+
+function changeNumericInputCell(event) {
+  saveStatetoURL();
   recalculate();
 }
 
 function registerEventHandlers() {
-  var nCells = numericInputCells.length;
-  for (var i = 0; i < nCells; i++) {
+  // Numeric input cells
+  for (var i = 0; i < numericInputCells.length; i++) {
     var elementID = numericInputCells[i];
     var element = document.getElementById(elementID);
     if (element == null) {
       console.log("Error: Could not get ID: " + elementID);
     } else {
-      element.onkeydown = handleFormKeyDown;
-      element.onkeyup = handleFormKeyUp;
+      element.onkeyup = changeNumericInputCell;
     }
   }
+  // Text input cells
+  for (var i = 0; i < textInputCells.length; i++) {
+    var elementID = textInputCells[i];
+    var element = document.getElementById(elementID);
+    if (element == null) {
+      console.log("Error: Could not get ID: " + elementID);
+    } else {
+      element.onkeyup = changeTextInputCell;
+    }
+  }
+  // Rounding checkbox.
   roundElem = document.getElementById('rounding_on');
   roundElem.addEventListener('change', recalculate);
+  // Significant figures input.
   sigFigElem = document.getElementById('significant_figures');
   sigFigElem.addEventListener('change', recalculate);
 }
@@ -55,6 +93,28 @@ function formatNum(number) {
     var rounded = number.toExponential(nSigFig - 1);
   }
   return rounded;
+}
+
+function loadStateFromURLFragment() {
+  var fragmentWithPoundSign = window.location.hash;
+  var fragment = fragmentWithPoundSign.substring(1);
+  if (fragment === '') {
+    // Nothing in fragment to load.
+    return;
+  }
+  var payloadStr = decodeURIComponent(fragment);
+  var payload = JSON.parse(payloadStr);
+  var cellState = payload["cellState"];
+  for (key in cellState) {
+    if (cellState.hasOwnProperty(key)) {
+      elem = document.getElementById(key);
+      if (elem == null) {
+        console.log("Error: Could not get ID: " + key);
+      } else {
+        elem.value = cellState[key];
+      }
+    }
+  }
 }
 
 function recalculate() {
@@ -120,6 +180,7 @@ function recalculate() {
 }
 
 function initialize() {
+  loadStateFromURLFragment();
   registerEventHandlers();
   recalculate();
 }
