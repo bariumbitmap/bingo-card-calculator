@@ -1,7 +1,9 @@
 - [x] Round to *n* sig figs
-- [ ] Save to JSON
-- [ ] Load from JSON
-- [ ] Save to CSV / TSV
 - [ ] Fill blank squares with Weird Al predictions
+- [ ] Save to JSON file
+- [ ] Load from JSON file
+- [ ] Copy to CSV / TSV
+- [ ] Copy to Markdown table
 - [ ] Button to Shift / Permute
 - [ ] Button to Shuffle
+- [ ] Combine everything into one standalone HTML file
