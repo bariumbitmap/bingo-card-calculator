@@ -1,4 +1,4 @@
-- [ ] Round to *n* sig figs
+- [x] Round to *n* sig figs
 - [ ] Save to JSON
 - [ ] Load from JSON
 - [ ] Save to CSV / TSV

@@ -41,6 +41,20 @@ function registerEventHandlers() {
       element.onkeyup = handleFormKeyUp;
     }
   }
+  roundElem = document.getElementById('rounding_on');
+  roundElem.addEventListener('change', recalculate);
+  sigFigElem = document.getElementById('significant_figures');
+  sigFigElem.addEventListener('change', recalculate);
+}
+
+function formatNum(number) {
+  var nSigFig = document.getElementById('significant_figures').value;
+  if (Math.abs(number) > 1e-4 && Math.abs(number) < 1e4) {
+    var rounded = number.toPrecision(nSigFig);
+  } else {
+    var rounded = number.toExponential(nSigFig - 1);
+  }
+  return rounded;
 }
 
 function recalculate() {
@@ -84,6 +98,7 @@ function recalculate() {
   var P_any = 1.0 - P_none
   P_out["P_any"] = P_any
 
+  var rounding_on = document.getElementById('rounding_on').checked;
   var nOutputCells = outputCells.length;
   for (var i = 0; i < nOutputCells ; i++) {
     var elementID = outputCells[i];
@@ -93,7 +108,12 @@ function recalculate() {
     } else {
       if (P_out[elementID] != null) {
         var this_P = P_out[elementID]
-        element.value = 100*this_P;
+        var rawPercent = 100*this_P
+        if (rounding_on === true) {
+          element.value = formatNum(rawPercent);
+        } else {
+          element.value = rawPercent;
+        }
       }
     }
   }
@@ -103,6 +123,5 @@ function initialize() {
   registerEventHandlers();
   recalculate();
 }
-
 
 window.onload = initialize;
