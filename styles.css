@@ -4,8 +4,11 @@ body {
 .description
 {
   font-family: sans-serif;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
   height: 6em;
-  width: 6em;
 }
 .main-head {
   grid-area: header;
