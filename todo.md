@@ -1,5 +1,5 @@
 - [x] Round to *n* sig figs
-- [ ] Fill blank squares with Weird Al predictions
+- [x] Fill blank squares with Weird Al predictions
 - [ ] Save to JSON file
 - [ ] Load from JSON file
 - [ ] Copy to CSV / TSV
