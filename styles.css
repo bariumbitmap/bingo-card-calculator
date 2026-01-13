@@ -18,7 +18,14 @@ body {
 }
 .container {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   grid-auto-rows: minmax(50px, auto);
   gap: 2px;
+}
+.big_header {
+  font-size: xx-large;
+  font-weight: bold;
+  text-align: center;
+  align-content: center;
+  vertical-align: middle;
 }
