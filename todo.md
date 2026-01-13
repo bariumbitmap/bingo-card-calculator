@@ -1,5 +1,6 @@
 - [x] Round to *n* sig figs
 - [x] Fill blank squares with Weird Al predictions
+- [ ] Store data inside URL fragment
 - [ ] Save to JSON file
 - [ ] Load from JSON file
 - [ ] Copy to CSV / TSV
