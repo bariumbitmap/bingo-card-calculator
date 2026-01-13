@@ -5,6 +5,6 @@
 - [ ] Load from JSON file
 - [ ] Copy to CSV / TSV
 - [ ] Copy to Markdown table
-- [ ] Button to Shift / Permute
+- [x] Button to Shift / Permute
 - [ ] Button to Shuffle
 - [ ] Combine everything into one standalone HTML file

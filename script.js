@@ -55,6 +55,161 @@ function changeNumericInputCell(event) {
   saveStatetoURL();
   recalculate();
 }
+function shiftForward() {
+  const mapForward = {
+    "B1" : "O5",
+    "I1" : "B1",
+    "N1" : "I1",
+    "G1" : "N1",
+    "O1" : "G1",
+    "B2" : "O1",
+    "I2" : "B2",
+    "N2" : "I2",
+    "G2" : "N2",
+    "O2" : "G2",
+    "B3" : "O2",
+    "I3" : "B3",
+    "G3" : "I3", // Skip free space
+    "O3" : "G3",
+    "B4" : "O3",
+    "I4" : "B4",
+    "N4" : "I4",
+    "G4" : "N4",
+    "O4" : "G4",
+    "B5" : "O4",
+    "I5" : "B5",
+    "N5" : "I5",
+    "G5" : "N5",
+    "O5" : "G5",
+    "B1text" : "O5text",
+    "I1text" : "B1text",
+    "N1text" : "I1text",
+    "G1text" : "N1text",
+    "O1text" : "G1text",
+    "B2text" : "O1text",
+    "I2text" : "B2text",
+    "N2text" : "I2text",
+    "G2text" : "N2text",
+    "O2text" : "G2text",
+    "B3text" : "O2text",
+    "I3text" : "B3text",
+    "G3text" : "I3text", // Skip free space
+    "O3text" : "G3text",
+    "B4text" : "O3text",
+    "I4text" : "B4text",
+    "N4text" : "I4text",
+    "G4text" : "N4text",
+    "O4text" : "G4text",
+    "B5text" : "O4text",
+    "I5text" : "B5text",
+    "N5text" : "I5text",
+    "G5text" : "N5text",
+    "O5text" : "G5text",
+  }
+  var allIDs = textInputCells.concat(numericInputCells);
+  var cellState = {};
+  for (var i = 0; i < allIDs.length; i++) {
+    var ID = allIDs[i];
+    var elem = document.getElementById(ID);
+    if (elem == null) {
+      console.log("Error: Could not get ID: '" + ID + "'");
+    } else {
+      cellState[ID] = elem.value;
+    }
+  }
+  for (key in mapForward) {
+    if (mapForward.hasOwnProperty(key)) {
+      elem = document.getElementById(key);
+      if (elem == null) {
+        console.log("Error: Could not get ID: " + key);
+      } else {
+        var mappedId = mapForward[key];
+        var newValue = cellState[mappedId]
+        elem.value = newValue;
+      }
+    }
+  }
+  saveStatetoURL();
+  recalculate();
+}
+
+function shiftBackward() {
+  const mapBackward = {
+    "B1" : "I1",
+    "I1" : "N1",
+    "N1" : "G1",
+    "G1" : "O1",
+    "O1" : "B2",
+    "B2" : "I2",
+    "I2" : "N2",
+    "N2" : "G2",
+    "G2" : "O2",
+    "O2" : "B3",
+    "B3" : "I3",
+    "I3" : "G3", // Skip free space
+    "G3" : "O3",
+    "O3" : "B4",
+    "B4" : "I4",
+    "I4" : "N4",
+    "N4" : "G4",
+    "G4" : "O4",
+    "O4" : "B5",
+    "B5" : "I5",
+    "I5" : "N5",
+    "N5" : "G5",
+    "G5" : "O5",
+    "O5" : "B1", // Back to beginning
+    "B1text" : "I1text",
+    "I1text" : "N1text",
+    "N1text" : "G1text",
+    "G1text" : "O1text",
+    "O1text" : "B2text",
+    "B2text" : "I2text",
+    "I2text" : "N2text",
+    "N2text" : "G2text",
+    "G2text" : "O2text",
+    "O2text" : "B3text",
+    "B3text" : "I3text",
+    "I3text" : "G3text", // Skip free space
+    "G3text" : "O3text",
+    "O3text" : "B4text",
+    "B4text" : "I4text",
+    "I4text" : "N4text",
+    "N4text" : "G4text",
+    "G4text" : "O4text",
+    "O4text" : "B5text",
+    "B5text" : "I5text",
+    "I5text" : "N5text",
+    "N5text" : "G5text",
+    "G5text" : "O5text",
+    "O5text" : "B1text", // Back to beginning
+  }
+  var allIDs = textInputCells.concat(numericInputCells);
+  var cellState = {};
+  for (var i = 0; i < allIDs.length; i++) {
+    var ID = allIDs[i];
+    var elem = document.getElementById(ID);
+    if (elem == null) {
+      console.log("Error: Could not get ID: '" + ID + "'");
+    } else {
+      cellState[ID] = elem.value;
+    }
+  }
+  for (key in mapBackward) {
+    if (mapBackward.hasOwnProperty(key)) {
+      elem = document.getElementById(key);
+      if (elem == null) {
+        console.log("Error: Could not get ID: " + key);
+      } else {
+        var mappedId = mapBackward[key];
+        var newValue = cellState[mappedId]
+        elem.value = newValue;
+      }
+    }
+  }
+  saveStatetoURL();
+  recalculate();
+}
 
 function registerEventHandlers() {
   // Numeric input cells
@@ -83,6 +238,12 @@ function registerEventHandlers() {
   // Significant figures input.
   sigFigElem = document.getElementById('significant_figures');
   sigFigElem.addEventListener('change', recalculate);
+  // Shift forward button
+  shift_forward = document.getElementById("shift_forward");
+  shift_forward.addEventListener("click", shiftForward);
+  // Shift backward button
+  shift_backward = document.getElementById("shift_backward");
+  shift_backward.addEventListener("click", shiftBackward);
 }
 
 function formatNum(number) {
