@@ -19,3 +19,4 @@ Maybe do
 - [ ] Copy to Markdown table
 - [ ] Buttons to rotate cells clockwise / counterclockwise
 - [ ] Combine everything into one standalone HTML file
+- [ ] Checkbox for locking in a cell when it happens (this could get complicated)
