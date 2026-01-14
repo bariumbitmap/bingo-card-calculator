@@ -3,9 +3,9 @@ function getBoardState() {
   var elements = document.getElementsByClassName("save-state")
   for (elem of elements) {
     if (elem.type == "textarea") {
-      boardState[elem.id] = elem.value;
+      boardState[elem.id] = {"value": elem.value};
     } else if (elem.type == "number") {
-      boardState[elem.id] = elem.value;
+      boardState[elem.id] = {"value": elem.value};
     } else {
       console.warn("for id '" + elem.id + "', type not implemented: '" + elem.type + "'");
     }
@@ -69,7 +69,7 @@ function shiftForward() {
         } else {
           var mappedKey = mapForward[key];
           var mappedId = mappedKey + IdSuffix;
-          var newValue = boardState[mappedId]
+          var newValue = boardState[mappedId]["value"]
           elem.value = newValue;
         }
       }
@@ -118,7 +118,7 @@ function shiftBackward() {
         } else {
           var mappedKey = mapBackward[key];
           var mappedId = mappedKey + IdSuffix;
-          var newValue = boardState[mappedId]
+          var newValue = boardState[mappedId]["value"]
           elem.value = newValue;
         }
       }
@@ -158,7 +158,7 @@ function shuffleCells() {
       if (elem1 == null) {
         console.error("Error: Could not get ID: '" + Id1 + "'");
       } else {
-        elem1.value = boardState[Id2];
+        elem1.value = boardState[Id2]["value"];
       }
     }
   }
@@ -192,7 +192,7 @@ function importFile(evt) {
       if (elem == null) {
         console.error("Error: Could not get ID: " + key);
       } else {
-        elem.value = desiredStates[key];
+        elem.value = desiredStates[key]["value"];
       }
     }
   }
@@ -271,7 +271,7 @@ function loadStateFromURLFragment() {
       if (elem == null) {
         console.error("Error: Could not get ID: " + key);
       } else {
-        elem.value = boardState[key];
+        elem.value = boardState[key]["value"];
       }
     }
   }
