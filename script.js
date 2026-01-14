@@ -57,25 +57,21 @@ function shiftForward() {
     "G5" : "N5",
     "O5" : "G5",
   }
+  const IdSuffixes = ["text", "num"];
   var boardState = getBoardState();
   for (key in mapForward) {
     if (mapForward.hasOwnProperty(key)) {
-      elem = document.getElementById(key);
-      if (elem == null) {
-        console.error("Error: Could not get ID: " + key);
-      } else {
-        var mappedId = mapForward[key];
-        var newValue = boardState[mappedId]
-        elem.value = newValue;
-      }
-      var textId = key + "text"
-      var textElem = document.getElementById(textId);
-      if (textElem == null) {
-        console.error("Error: Could not get ID: " + textId);
-      } else {
-        var mappedTextId = mapForward[key] + "text";
-        var newTextValue = boardState [mappedTextId]
-        textElem.value = newTextValue;
+      for (IdSuffix of IdSuffixes) {
+        var Id = key + IdSuffix;
+        elem = document.getElementById(Id);
+        if (elem == null) {
+          console.error("Error: Could not get ID: " + Id);
+        } else {
+          var mappedKey = mapForward[key];
+          var mappedId = mappedKey + IdSuffix;
+          var newValue = boardState[mappedId]
+          elem.value = newValue;
+        }
       }
     }
   }
@@ -110,25 +106,21 @@ function shiftBackward() {
     "G5" : "O5",
     "O5" : "B1", // Back to beginning
   }
+  const IdSuffixes = ["text", "num"]
   var boardState = getBoardState();
   for (key in mapBackward) {
     if (mapBackward.hasOwnProperty(key)) {
-      var elem = document.getElementById(key);
-      if (elem == null) {
-        console.error("Error: Could not get ID: " + key);
-      } else {
-        var mappedId = mapBackward[key];
-        var newValue = boardState [mappedId]
-        elem.value = newValue;
-      }
-      var textId = key + "text"
-      var textElem = document.getElementById(textId);
-      if (textElem == null) {
-        console.error("Error: Could not get ID: " + textId);
-      } else {
-        var mappedTextId = mapBackward[key] + "text";
-        var newTextValue = boardState [mappedTextId]
-        textElem.value = newTextValue;
+      for (IdSuffix of IdSuffixes) {
+        var Id = key + IdSuffix;
+        elem = document.getElementById(Id);
+        if (elem == null) {
+          console.error("Error: Could not get ID: " + Id);
+        } else {
+          var mappedKey = mapBackward[key];
+          var mappedId = mappedKey + IdSuffix;
+          var newValue = boardState[mappedId]
+          elem.value = newValue;
+        }
       }
     }
   }
@@ -157,33 +149,16 @@ function shuffleCells() {
   ];
   var shuffled = original.slice();
   shuffleArray(shuffled);
+  const IdSuffixes = ["text", "num"]
   for (var i = 0; i < original.length; i++) {
-    // Numeric cell
-    var numCellId = original[i];
-    var numElem1 = document.getElementById(numCellId);
-    if (numElem1 == null) {
-      console.error("Error: Could not get ID: '" + numCellId + "'");
-    } else {
-      var numId2 = shuffled[i];
-      var numElem2 = document.getElementById(numId2);
-      if (numElem2 == null) {
-        console.error("Error: Could not get ID: '" + numId2 + "'");
+    for (IdSuffix of IdSuffixes) {
+      var Id1 = original[i] + IdSuffix;
+      var Id2 = shuffled[i] + IdSuffix;
+      var elem1 = document.getElementById(Id1);
+      if (elem1 == null) {
+        console.error("Error: Could not get ID: '" + Id1 + "'");
       } else {
-        numElem1.value = boardState[numId2];
-      }
-    }
-    // Text cell
-    textCellId = numCellId + "text";
-    var textElem1 = document.getElementById(textCellId);
-    if (textElem1 == null) {
-      console.error("Error: Could not get ID: '" + textCellId + "'");
-    } else {
-      var textId2 = shuffled[i] + "text";
-      var textElem2 = document.getElementById(textId2);
-      if (numElem2 == null) {
-        console.error("Error: Could not get ID: '" + textId2 + "'");
-      } else {
-        textElem1.value = boardState[textId2];
+        elem1.value = boardState[Id2];
       }
     }
   }
@@ -305,9 +280,10 @@ function loadStateFromURLFragment() {
 function recalculate() {
   var P = {};
 
-  var numberInputElems = document.getElementsByClassName("number-input")
-  for (elem of numberInputElems) {
-      P[elem.id] = elem.value/100;
+  var cells = document.getElementsByClassName("cell");
+  for (elem of cells) {
+    var numElem = document.getElementById(elem.id + "num");
+    P[elem.id] = numElem.value/100;
   }
   var P_out = {
     "row1" : P.B1 * P.I1 * P.N1 * P.G1 * P.O1,
