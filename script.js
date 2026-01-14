@@ -276,6 +276,59 @@ function shuffleCells() {
   recalculate();
 }
 
+function exportJSON(evt) {
+  console.log("save");
+  var elementsToSave = document.getElementsByClassName("save-state")
+  var checklistState = {};
+  for (elem of elementsToSave) {
+    if (elem.type == "textarea") {
+      checklistState[elem.id] = elem.value;
+    } else if (elem.type == "number") {
+      checklistState[elem.id] = elem.value;
+    } else {
+      console.warn("for id '" + elem.id + "', type not implemented: '" + elem.type + "'");
+    }
+  }
+  var filename = 'bingo_card.json';
+  var jsonBlob = new Blob([JSON.stringify(checklistState)], {
+      type: 'application/json',
+      name: filename
+  });
+  var tmpAnchor = document.createElement("a");
+  tmpAnchor.href = URL.createObjectURL(jsonBlob);
+  tmpAnchor.download = filename;
+  tmpAnchor.click();
+  // No need to delete tmpAnchor manually, it will be automatically garbage-collected.
+  return;
+}
+
+function importFile(evt) {
+  console.log("processFile");
+  var jsonString = evt.target.result;
+  var desiredStates = JSON.parse(jsonString);
+  var elementsToLoad = document.getElementsByClassName("load-state")
+  for (elem of elementsToLoad) {
+    var newState = desiredStates[elem.id];
+    if (elem.type === "textarea") {
+      elem.value = newState;
+    } else if (elem.type === "number") {
+      elem.value = newState;
+    } else {
+      console.warn("for id '" + elem.id + "', type not implemented: '" + elem.type + "'");
+    }
+  }
+}
+function readFile(evt) {
+  console.log("readFile");
+  var fileList = evt.target.files;
+  var currentFile = fileList[0];
+  console.log(currentFile.name)
+  var reader = new FileReader();
+  reader.onload = importFile;
+  reader.readAsText(currentFile);
+  return;
+}
+
 function registerEventHandlers() {
   // Numeric input cells
   for (var i = 0; i < numericInputCells.length; i++) {
@@ -313,6 +366,14 @@ function registerEventHandlers() {
   // Shuffle button
   shuffle_button = document.getElementById("shuffle_cells");
   shuffle_button.addEventListener("click", shuffleCells);
+
+  // Save to JSON.
+  var exportButton = document.getElementById("export_json");
+  exportButton.addEventListener('click', exportJSON);
+  // Save from JSON.
+  var importButton = document.getElementById("import_json");
+  importButton.addEventListener('change', readFile);
+
 }
 
 function formatNum(number) {
