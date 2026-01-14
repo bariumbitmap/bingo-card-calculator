@@ -285,6 +285,7 @@ function registerEventHandlers() {
       console.log("Error: Could not get ID: " + elementID);
     } else {
       element.onkeyup = changeNumericInputCell;
+      element.onchange = recalculate;
     }
   }
   // Text input cells
