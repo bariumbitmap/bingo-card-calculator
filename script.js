@@ -211,6 +211,71 @@ function shiftBackward() {
   recalculate();
 }
 
+function shuffleCells() {
+  var allIDs = textInputCells.concat(numericInputCells);
+  var cellState = {};
+  for (var i = 0; i < allIDs.length; i++) {
+    var ID = allIDs[i];
+    var elem = document.getElementById(ID);
+    if (elem == null) {
+      console.log("Error: Could not get ID: '" + ID + "'");
+    } else {
+      cellState[ID] = elem.value;
+    }
+  }
+  // Source - https://stackoverflow.com/a/12646864
+  /* Randomize array in-place using Durstenfeld shuffle algorithm */
+  function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+  }
+  let original = [
+    "B1", "I1", "N1", "G1", "O1",
+    "B2", "I2", "N2", "G2", "O2",
+    "B3", "I3", "G3", "O3", // Omit free space N3
+    "B4", "I4", "N4", "G4", "O4",
+    "B5", "I5", "N5", "G5", "O5",
+  ];
+  var shuffled = original.slice();
+  shuffleArray(shuffled);
+  for (var i = 0; i < original.length; i++) {
+    // Numeric cell
+    var numCellId = original[i];
+    var numElem1 = document.getElementById(numCellId);
+    if (numElem1 == null) {
+      console.log("Error: Could not get ID: '" + numCellId + "'");
+    } else {
+      var numId2 = shuffled[i];
+      var numElem2 = document.getElementById(numId2);
+      if (numElem2 == null) {
+        console.log("Error: Could not get ID: '" + numId2 + "'");
+      } else {
+        numElem1.value = cellState[numId2];
+      }
+    }
+    // Text cell
+    textCellId = numCellId + "text";
+    var textElem1 = document.getElementById(textCellId);
+    if (textElem1 == null) {
+      console.log("Error: Could not get ID: '" + textCellId + "'");
+    } else {
+      var textId2 = shuffled[i] + "text";
+      var textElem2 = document.getElementById(textId2);
+      if (numElem2 == null) {
+        console.log("Error: Could not get ID: '" + textId2 + "'");
+      } else {
+        textElem1.value = cellState[textId2];
+      }
+    }
+  }
+  saveStatetoURL();
+  recalculate();
+}
+
 function registerEventHandlers() {
   // Numeric input cells
   for (var i = 0; i < numericInputCells.length; i++) {
@@ -244,6 +309,9 @@ function registerEventHandlers() {
   // Shift backward button
   shift_backward = document.getElementById("shift_backward");
   shift_backward.addEventListener("click", shiftBackward);
+  // Shuffle button
+  shuffle_button = document.getElementById("shuffle_cells");
+  shuffle_button.addEventListener("click", shuffleCells);
 }
 
 function formatNum(number) {
