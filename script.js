@@ -18,8 +18,29 @@ function saveStatetoURL() {
   var payload = {
     "boardState": boardState
   }
-  var payloadStr = JSON.stringify(payload);
-  window.location.hash = '#' + encodeURIComponent(payloadStr);
+  var jsonStr = JSON.stringify(payload);
+  window.location.hash = '#' + encodeURIComponent(jsonStr);
+}
+function loadStateFromURLFragment() {
+  var fragmentWithPoundSign = window.location.hash;
+  var fragment = fragmentWithPoundSign.substring(1);
+  if (fragment === '') {
+    // Nothing in fragment to load.
+    return;
+  }
+  var jsonStr = decodeURIComponent(fragment);
+  var payload = JSON.parse(jsonStr);
+  var boardState = payload["boardState"];
+  for (key in boardState) {
+    if (boardState.hasOwnProperty(key)) {
+      elem = document.getElementById(key);
+      if (elem == null) {
+        console.error("Error: Could not get ID: " + key);
+      } else {
+        elem.value = boardState[key]["value"];
+      }
+    }
+  }
 }
 
 function changeTextInputCell(evt) {
@@ -253,28 +274,6 @@ function formatNum(number) {
     var rounded = number.toExponential(nSigFig - 1);
   }
   return rounded;
-}
-
-function loadStateFromURLFragment() {
-  var fragmentWithPoundSign = window.location.hash;
-  var fragment = fragmentWithPoundSign.substring(1);
-  if (fragment === '') {
-    // Nothing in fragment to load.
-    return;
-  }
-  var payloadStr = decodeURIComponent(fragment);
-  var payload = JSON.parse(payloadStr);
-  var boardState = payload["boardState"];
-  for (key in boardState) {
-    if (boardState.hasOwnProperty(key)) {
-      elem = document.getElementById(key);
-      if (elem == null) {
-        console.error("Error: Could not get ID: " + key);
-      } else {
-        elem.value = boardState[key]["value"];
-      }
-    }
-  }
 }
 
 function recalculate() {
