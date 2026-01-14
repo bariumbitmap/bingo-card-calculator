@@ -1,50 +1,22 @@
-const outputCells = [
-  "diagonal_up",
-  "row1",
-  "row2",
-  "row3",
-  "row4",
-  "row5",
-  "col1",
-  "col2",
-  "col3",
-  "col4",
-  "col5",
-  "diagonal_down",
-  "P_any",
-];
-
-// TODO: use CSS class instead
-const numericInputCells = [
-  "B1", "I1", "N1", "G1", "O1",
-  "B2", "I2", "N2", "G2", "O2",
-  "B3", "I3", "N3", "G3", "O3",
-  "B4", "I4", "N4", "G4", "O4",
-  "B5", "I5", "N5", "G5", "O5",
-];
-// TODO: use CSS class instead
-const textInputCells = [
-  "B1text", "I1text", "N1text", "G1text", "O1text",
-  "B2text", "I2text", "N2text", "G2text", "O2text",
-  "B3text", "I3text", "N3text", "G3text", "O3text",
-  "B4text", "I4text", "N4text", "G4text", "O4text",
-  "B5text", "I5text", "N5text", "G5text", "O5text",
-];
-
-function saveStatetoURL() {
-  var allIDs = textInputCells.concat(numericInputCells);
-  var cellState = {};
-  for (var i = 0; i < allIDs.length; i++) {
-    var ID = allIDs[i];
-    var elem = document.getElementById(ID);
-    if (elem == null) {
-      console.log("Error: Could not get ID: '" + ID + "'");
+function getBoardState() {
+  var boardState = {};
+  var elements = document.getElementsByClassName("save-state")
+  for (elem of elements) {
+    if (elem.type == "textarea") {
+      boardState[elem.id] = elem.value;
+    } else if (elem.type == "number") {
+      boardState[elem.id] = elem.value;
     } else {
-      cellState[ID] = elem.value;
+      console.warn("for id '" + elem.id + "', type not implemented: '" + elem.type + "'");
     }
   }
+  return boardState;
+}
+
+function saveStatetoURL() {
+  var boardState = getBoardState();
   var payload = {
-    "cellState": cellState
+    "boardState": boardState
   }
   var payloadStr = JSON.stringify(payload);
   window.location.hash = '#' + encodeURIComponent(payloadStr);
@@ -59,6 +31,7 @@ function changeNumericInputCell(evt) {
   recalculate();
 }
 function shiftForward() {
+  // TODO: avoid redundancy with 'text'
   const mapForward = {
     "B1" : "O5",
     "I1" : "B1",
@@ -109,17 +82,7 @@ function shiftForward() {
     "G5text" : "N5text",
     "O5text" : "G5text",
   }
-  var allIDs = textInputCells.concat(numericInputCells);
-  var cellState = {};
-  for (var i = 0; i < allIDs.length; i++) {
-    var ID = allIDs[i];
-    var elem = document.getElementById(ID);
-    if (elem == null) {
-      console.log("Error: Could not get ID: '" + ID + "'");
-    } else {
-      cellState[ID] = elem.value;
-    }
-  }
+  var boardState = getBoardState();
   for (key in mapForward) {
     if (mapForward.hasOwnProperty(key)) {
       elem = document.getElementById(key);
@@ -127,7 +90,7 @@ function shiftForward() {
         console.log("Error: Could not get ID: " + key);
       } else {
         var mappedId = mapForward[key];
-        var newValue = cellState[mappedId]
+        var newValue = boardState[mappedId]
         elem.value = newValue;
       }
     }
@@ -137,6 +100,7 @@ function shiftForward() {
 }
 
 function shiftBackward() {
+  // TODO: avoid redundancy with 'text'
   const mapBackward = {
     "B1" : "I1",
     "I1" : "N1",
@@ -187,17 +151,7 @@ function shiftBackward() {
     "G5text" : "O5text",
     "O5text" : "B1text", // Back to beginning
   }
-  var allIDs = textInputCells.concat(numericInputCells);
-  var cellState = {};
-  for (var i = 0; i < allIDs.length; i++) {
-    var ID = allIDs[i];
-    var elem = document.getElementById(ID);
-    if (elem == null) {
-      console.log("Error: Could not get ID: '" + ID + "'");
-    } else {
-      cellState[ID] = elem.value;
-    }
-  }
+  var boardState = getBoardState();
   for (key in mapBackward) {
     if (mapBackward.hasOwnProperty(key)) {
       elem = document.getElementById(key);
@@ -205,7 +159,7 @@ function shiftBackward() {
         console.log("Error: Could not get ID: " + key);
       } else {
         var mappedId = mapBackward[key];
-        var newValue = cellState[mappedId]
+        var newValue = boardState [mappedId]
         elem.value = newValue;
       }
     }
@@ -215,17 +169,7 @@ function shiftBackward() {
 }
 
 function shuffleCells() {
-  var allIDs = textInputCells.concat(numericInputCells);
-  var cellState = {};
-  for (var i = 0; i < allIDs.length; i++) {
-    var ID = allIDs[i];
-    var elem = document.getElementById(ID);
-    if (elem == null) {
-      console.log("Error: Could not get ID: '" + ID + "'");
-    } else {
-      cellState[ID] = elem.value;
-    }
-  }
+  var boardState = getBoardState();
   // Source - https://stackoverflow.com/a/12646864
   /* Randomize array in-place using Durstenfeld shuffle algorithm */
   function shuffleArray(array) {
@@ -257,7 +201,7 @@ function shuffleCells() {
       if (numElem2 == null) {
         console.log("Error: Could not get ID: '" + numId2 + "'");
       } else {
-        numElem1.value = cellState[numId2];
+        numElem1.value = boardState[numId2];
       }
     }
     // Text cell
@@ -271,7 +215,7 @@ function shuffleCells() {
       if (numElem2 == null) {
         console.log("Error: Could not get ID: '" + textId2 + "'");
       } else {
-        textElem1.value = cellState[textId2];
+        textElem1.value = boardState[textId2];
       }
     }
   }
@@ -280,20 +224,10 @@ function shuffleCells() {
 }
 
 function exportJSON(evt) {
-  console.log("save");
-  var elementsToSave = document.getElementsByClassName("save-state")
-  var checklistState = {};
-  for (elem of elementsToSave) {
-    if (elem.type == "textarea") {
-      checklistState[elem.id] = elem.value;
-    } else if (elem.type == "number") {
-      checklistState[elem.id] = elem.value;
-    } else {
-      console.warn("for id '" + elem.id + "', type not implemented: '" + elem.type + "'");
-    }
-  }
+  var boardState = getBoardState();
+
   var filename = 'bingo_card.json';
-  var jsonBlob = new Blob([JSON.stringify(checklistState)], {
+  var jsonBlob = new Blob([JSON.stringify(boardState)], {
       type: 'application/json',
       name: filename
   });
@@ -309,6 +243,7 @@ function importFile(evt) {
   console.log("processFile");
   var jsonString = evt.target.result;
   var desiredStates = JSON.parse(jsonString);
+
   var elementsToLoad = document.getElementsByClassName("load-state")
   for (elem of elementsToLoad) {
     var newState = desiredStates[elem.id];
@@ -334,25 +269,15 @@ function readFile(evt) {
 
 function registerEventHandlers() {
   // Numeric input cells
-  for (var i = 0; i < numericInputCells.length; i++) {
-    var elementID = numericInputCells[i];
-    var element = document.getElementById(elementID);
-    if (element == null) {
-      console.log("Error: Could not get ID: " + elementID);
-    } else {
-      element.onkeyup = changeNumericInputCell;
-      element.onchange = recalculate;
-    }
+  var numberInputElems = document.getElementsByClassName("number-input")
+  for (elem of numberInputElems) {
+      elem.onkeyup = changeNumericInputCell;
+      elem.onchange = recalculate;
   }
   // Text input cells
-  for (var i = 0; i < textInputCells.length; i++) {
-    var elementID = textInputCells[i];
-    var element = document.getElementById(elementID);
-    if (element == null) {
-      console.log("Error: Could not get ID: " + elementID);
-    } else {
-      element.onkeyup = changeTextInputCell;
-    }
+  var textInputElems = document.getElementsByClassName("text-input")
+  for (elem of textInputElems) {
+    elem.onkeyup = changeTextInputCell;
   }
   // Rounding checkbox.
   roundElem = document.getElementById('rounding_on');
@@ -398,14 +323,14 @@ function loadStateFromURLFragment() {
   }
   var payloadStr = decodeURIComponent(fragment);
   var payload = JSON.parse(payloadStr);
-  var cellState = payload["cellState"];
-  for (key in cellState) {
-    if (cellState.hasOwnProperty(key)) {
+  var boardState = payload["boardState"];
+  for (key in boardState) {
+    if (boardState.hasOwnProperty(key)) {
       elem = document.getElementById(key);
       if (elem == null) {
         console.log("Error: Could not get ID: " + key);
       } else {
-        elem.value = cellState[key];
+        elem.value = boardState[key];
       }
     }
   }
@@ -413,15 +338,10 @@ function loadStateFromURLFragment() {
 
 function recalculate() {
   var P = {};
-  const nInputCells = numericInputCells.length;
-  for (var i = 0; i < nInputCells; i++) {
-    var elementID = numericInputCells[i];
-    var element = document.getElementById(elementID);
-    if (element == null) {
-      console.log("Error: Could not get ID: " + elementID);
-    } else {
-      P[elementID] = element.value/100;
-    }
+
+  var numberInputElems = document.getElementsByClassName("number-input")
+  for (elem of numberInputElems) {
+      P[elem.id] = elem.value/100;
   }
   var P_out = {
     "row1" : P.B1 * P.I1 * P.N1 * P.G1 * P.O1,
@@ -453,21 +373,16 @@ function recalculate() {
   P_out["P_any"] = P_any
 
   var rounding_on = document.getElementById('rounding_on').checked;
-  var nOutputCells = outputCells.length;
-  for (var i = 0; i < nOutputCells ; i++) {
-    var elementID = outputCells[i];
-    var element = document.getElementById(elementID);
-    if (element == null) {
-      console.log("Error: Could not get ID: " + elementID);
-    } else {
-      if (P_out[elementID] != null) {
-        var this_P = P_out[elementID]
-        var rawPercent = 100*this_P
-        if (rounding_on === true) {
-          element.value = formatNum(rawPercent);
-        } else {
-          element.value = rawPercent;
-        }
+
+  var elements = document.getElementsByClassName("num-output")
+  for (elem of elements) {
+    if (P_out[elem.id] != null) {
+      var this_P = P_out[elem.id]
+      var rawPercent = 100*this_P
+      if (rounding_on === true) {
+        elem.value = formatNum(rawPercent);
+      } else {
+        elem.value = rawPercent;
       }
     }
   }
