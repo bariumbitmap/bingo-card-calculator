@@ -244,15 +244,14 @@ function importFile(evt) {
   var jsonString = evt.target.result;
   var desiredStates = JSON.parse(jsonString);
 
-  var elementsToLoad = document.getElementsByClassName("load-state")
-  for (elem of elementsToLoad) {
-    var newState = desiredStates[elem.id];
-    if (elem.type === "textarea") {
-      elem.value = newState;
-    } else if (elem.type === "number") {
-      elem.value = newState;
-    } else {
-      console.warn("for id '" + elem.id + "', type not implemented: '" + elem.type + "'");
+  for (key in desiredStates) {
+    if (desiredStates.hasOwnProperty(key)) {
+      var elem = document.getElementById(key);
+      if (elem == null) {
+        console.error("Error: Could not get ID: " + key);
+      } else {
+        elem.value = desiredStates[key];
+      }
     }
   }
 }
