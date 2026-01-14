@@ -9,3 +9,9 @@
 - [x] Button to Shift / Permute
 - [ ] Button to Shuffle
 - [ ] Combine everything into one standalone HTML file
+
+Testing
+- [x] desktop Firefox on Linux
+- [ ] mobile Firefox
+- [ ] mobile Chrome
+- [ ] desktop Chrome
