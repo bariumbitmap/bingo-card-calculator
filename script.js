@@ -87,7 +87,7 @@ function shiftForward() {
     if (mapForward.hasOwnProperty(key)) {
       elem = document.getElementById(key);
       if (elem == null) {
-        console.log("Error: Could not get ID: " + key);
+        console.error("Error: Could not get ID: " + key);
       } else {
         var mappedId = mapForward[key];
         var newValue = boardState[mappedId]
@@ -156,7 +156,7 @@ function shiftBackward() {
     if (mapBackward.hasOwnProperty(key)) {
       elem = document.getElementById(key);
       if (elem == null) {
-        console.log("Error: Could not get ID: " + key);
+        console.error("Error: Could not get ID: " + key);
       } else {
         var mappedId = mapBackward[key];
         var newValue = boardState [mappedId]
@@ -194,12 +194,12 @@ function shuffleCells() {
     var numCellId = original[i];
     var numElem1 = document.getElementById(numCellId);
     if (numElem1 == null) {
-      console.log("Error: Could not get ID: '" + numCellId + "'");
+      console.error("Error: Could not get ID: '" + numCellId + "'");
     } else {
       var numId2 = shuffled[i];
       var numElem2 = document.getElementById(numId2);
       if (numElem2 == null) {
-        console.log("Error: Could not get ID: '" + numId2 + "'");
+        console.error("Error: Could not get ID: '" + numId2 + "'");
       } else {
         numElem1.value = boardState[numId2];
       }
@@ -208,12 +208,12 @@ function shuffleCells() {
     textCellId = numCellId + "text";
     var textElem1 = document.getElementById(textCellId);
     if (textElem1 == null) {
-      console.log("Error: Could not get ID: '" + textCellId + "'");
+      console.error("Error: Could not get ID: '" + textCellId + "'");
     } else {
       var textId2 = shuffled[i] + "text";
       var textElem2 = document.getElementById(textId2);
       if (numElem2 == null) {
-        console.log("Error: Could not get ID: '" + textId2 + "'");
+        console.error("Error: Could not get ID: '" + textId2 + "'");
       } else {
         textElem1.value = boardState[textId2];
       }
@@ -240,7 +240,6 @@ function exportJSON(evt) {
 }
 
 function importFile(evt) {
-  console.log("processFile");
   var jsonString = evt.target.result;
   var desiredStates = JSON.parse(jsonString);
 
@@ -257,10 +256,9 @@ function importFile(evt) {
   saveStatetoURL();
 }
 function readFile(evt) {
-  console.log("readFile");
   var fileList = evt.target.files;
   var currentFile = fileList[0];
-  console.log(currentFile.name)
+  console.log("Reading file: '"+currentFile.name+"'")
   var reader = new FileReader();
   reader.onload = importFile;
   reader.readAsText(currentFile);
@@ -328,7 +326,7 @@ function loadStateFromURLFragment() {
     if (boardState.hasOwnProperty(key)) {
       elem = document.getElementById(key);
       if (elem == null) {
-        console.log("Error: Could not get ID: " + key);
+        console.error("Error: Could not get ID: " + key);
       } else {
         elem.value = boardState[key];
       }
