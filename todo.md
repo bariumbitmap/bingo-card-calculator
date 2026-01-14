@@ -7,7 +7,7 @@
 - [ ] Copy to CSV / TSV
 - [ ] Copy to Markdown table
 - [x] Button to Shift / Permute
-- [ ] Button to Shuffle
+- [x] Button to Shuffle
 - [ ] Combine everything into one standalone HTML file
 
 Testing
