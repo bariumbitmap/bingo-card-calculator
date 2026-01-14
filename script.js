@@ -254,6 +254,7 @@ function importFile(evt) {
       }
     }
   }
+  saveStatetoURL();
 }
 function readFile(evt) {
   console.log("readFile");
