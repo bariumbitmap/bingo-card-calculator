@@ -31,7 +31,6 @@ function changeNumericInputCell(evt) {
   recalculate();
 }
 function shiftForward() {
-  // TODO: avoid redundancy with 'text'
   const mapForward = {
     "B1" : "O5",
     "I1" : "B1",
@@ -57,30 +56,6 @@ function shiftForward() {
     "N5" : "I5",
     "G5" : "N5",
     "O5" : "G5",
-    "B1text" : "O5text",
-    "I1text" : "B1text",
-    "N1text" : "I1text",
-    "G1text" : "N1text",
-    "O1text" : "G1text",
-    "B2text" : "O1text",
-    "I2text" : "B2text",
-    "N2text" : "I2text",
-    "G2text" : "N2text",
-    "O2text" : "G2text",
-    "B3text" : "O2text",
-    "I3text" : "B3text",
-    "G3text" : "I3text", // Skip free space
-    "O3text" : "G3text",
-    "B4text" : "O3text",
-    "I4text" : "B4text",
-    "N4text" : "I4text",
-    "G4text" : "N4text",
-    "O4text" : "G4text",
-    "B5text" : "O4text",
-    "I5text" : "B5text",
-    "N5text" : "I5text",
-    "G5text" : "N5text",
-    "O5text" : "G5text",
   }
   var boardState = getBoardState();
   for (key in mapForward) {
@@ -93,6 +68,15 @@ function shiftForward() {
         var newValue = boardState[mappedId]
         elem.value = newValue;
       }
+      var textId = key + "text"
+      var textElem = document.getElementById(textId);
+      if (textElem == null) {
+        console.error("Error: Could not get ID: " + textId);
+      } else {
+        var mappedTextId = mapForward[key] + "text";
+        var newTextValue = boardState [mappedTextId]
+        textElem.value = newTextValue;
+      }
     }
   }
   saveStatetoURL();
@@ -100,7 +84,6 @@ function shiftForward() {
 }
 
 function shiftBackward() {
-  // TODO: avoid redundancy with 'text'
   const mapBackward = {
     "B1" : "I1",
     "I1" : "N1",
@@ -126,41 +109,26 @@ function shiftBackward() {
     "N5" : "G5",
     "G5" : "O5",
     "O5" : "B1", // Back to beginning
-    "B1text" : "I1text",
-    "I1text" : "N1text",
-    "N1text" : "G1text",
-    "G1text" : "O1text",
-    "O1text" : "B2text",
-    "B2text" : "I2text",
-    "I2text" : "N2text",
-    "N2text" : "G2text",
-    "G2text" : "O2text",
-    "O2text" : "B3text",
-    "B3text" : "I3text",
-    "I3text" : "G3text", // Skip free space
-    "G3text" : "O3text",
-    "O3text" : "B4text",
-    "B4text" : "I4text",
-    "I4text" : "N4text",
-    "N4text" : "G4text",
-    "G4text" : "O4text",
-    "O4text" : "B5text",
-    "B5text" : "I5text",
-    "I5text" : "N5text",
-    "N5text" : "G5text",
-    "G5text" : "O5text",
-    "O5text" : "B1text", // Back to beginning
   }
   var boardState = getBoardState();
   for (key in mapBackward) {
     if (mapBackward.hasOwnProperty(key)) {
-      elem = document.getElementById(key);
+      var elem = document.getElementById(key);
       if (elem == null) {
         console.error("Error: Could not get ID: " + key);
       } else {
         var mappedId = mapBackward[key];
         var newValue = boardState [mappedId]
         elem.value = newValue;
+      }
+      var textId = key + "text"
+      var textElem = document.getElementById(textId);
+      if (textElem == null) {
+        console.error("Error: Could not get ID: " + textId);
+      } else {
+        var mappedTextId = mapBackward[key] + "text";
+        var newTextValue = boardState [mappedTextId]
+        textElem.value = newTextValue;
       }
     }
   }
