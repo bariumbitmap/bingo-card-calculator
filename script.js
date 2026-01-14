@@ -13,6 +13,8 @@ const outputCells = [
   "diagonal_down",
   "P_any",
 ];
+
+// TODO: use CSS class instead
 const numericInputCells = [
   "B1", "I1", "N1", "G1", "O1",
   "B2", "I2", "N2", "G2", "O2",
@@ -20,6 +22,7 @@ const numericInputCells = [
   "B4", "I4", "N4", "G4", "O4",
   "B5", "I5", "N5", "G5", "O5",
 ];
+// TODO: use CSS class instead
 const textInputCells = [
   "B1text", "I1text", "N1text", "G1text", "O1text",
   "B2text", "I2text", "N2text", "G2text", "O2text",
@@ -47,11 +50,11 @@ function saveStatetoURL() {
   window.location.hash = '#' + encodeURIComponent(payloadStr);
 }
 
-function changeTextInputCell(event) {
+function changeTextInputCell(evt) {
   saveStatetoURL();
 }
 
-function changeNumericInputCell(event) {
+function changeNumericInputCell(evt) {
   saveStatetoURL();
   recalculate();
 }
