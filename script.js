@@ -1,10 +1,10 @@
 function getBoardState () {
   const boardState = {};
   const elements = document.getElementsByClassName('save-state');
-  for (elem of elements) {
-    if (elem.type == 'textarea') {
+  for (const elem of elements) {
+    if (elem.type === 'textarea') {
       boardState[elem.id] = { value: elem.value };
-    } else if (elem.type == 'number') {
+    } else if (elem.type === 'number') {
       boardState[elem.id] = { value: elem.value };
     } else {
       console.warn("for id '" + elem.id + "', type not implemented: '" + elem.type + "'");
@@ -31,9 +31,9 @@ function loadStateFromURLFragment () {
   const jsonStr = decodeURIComponent(fragment);
   const payload = JSON.parse(jsonStr);
   const boardState = payload.boardState;
-  for (key in boardState) {
+  for (const key in boardState) {
     if (boardState.hasOwnProperty(key)) {
-      elem = document.getElementById(key);
+      const elem = document.getElementById(key);
       if (elem == null) {
         console.error('Error: Could not get ID: ' + key);
       } else {
@@ -80,11 +80,11 @@ function shiftForward () {
   };
   const IdSuffixes = ['text', 'num'];
   const boardState = getBoardState();
-  for (key in mapForward) {
+  for (const key in mapForward) {
     if (mapForward.hasOwnProperty(key)) {
-      for (IdSuffix of IdSuffixes) {
+      for (const IdSuffix of IdSuffixes) {
         const Id = key + IdSuffix;
-        elem = document.getElementById(Id);
+        const elem = document.getElementById(Id);
         if (elem == null) {
           console.error('Error: Could not get ID: ' + Id);
         } else {
@@ -129,11 +129,11 @@ function shiftBackward () {
   };
   const IdSuffixes = ['text', 'num'];
   const boardState = getBoardState();
-  for (key in mapBackward) {
+  for (const key in mapBackward) {
     if (mapBackward.hasOwnProperty(key)) {
-      for (IdSuffix of IdSuffixes) {
+      for (const IdSuffix of IdSuffixes) {
         const Id = key + IdSuffix;
-        elem = document.getElementById(Id);
+        const elem = document.getElementById(Id);
         if (elem == null) {
           console.error('Error: Could not get ID: ' + Id);
         } else {
@@ -172,7 +172,7 @@ function shuffleCells () {
   shuffleArray(shuffled);
   const IdSuffixes = ['text', 'num'];
   for (let i = 0; i < original.length; i++) {
-    for (IdSuffix of IdSuffixes) {
+    for (const IdSuffix of IdSuffixes) {
       const Id1 = original[i] + IdSuffix;
       const Id2 = shuffled[i] + IdSuffix;
       const elem1 = document.getElementById(Id1);
@@ -206,7 +206,7 @@ function importFile (evt) {
   const jsonString = evt.target.result;
   const desiredStates = JSON.parse(jsonString);
 
-  for (key in desiredStates) {
+  for (const key in desiredStates) {
     if (desiredStates.hasOwnProperty(key)) {
       const elem = document.getElementById(key);
       if (elem == null) {
@@ -230,29 +230,29 @@ function readFile (evt) {
 function registerEventHandlers () {
   // Numeric input cells
   const numberInputElems = document.getElementsByClassName('number-input');
-  for (elem of numberInputElems) {
+  for (const elem of numberInputElems) {
     elem.onkeyup = changeNumericInputCell;
     elem.onchange = recalculate;
   }
   // Text input cells
   const textInputElems = document.getElementsByClassName('text-input');
-  for (elem of textInputElems) {
+  for (const elem of textInputElems) {
     elem.onkeyup = changeTextInputCell;
   }
   // Rounding checkbox.
-  roundElem = document.getElementById('rounding_on');
+  const roundElem = document.getElementById('rounding_on');
   roundElem.addEventListener('change', recalculate);
   // Significant figures input.
-  sigFigElem = document.getElementById('significant_figures');
+  const sigFigElem = document.getElementById('significant_figures');
   sigFigElem.addEventListener('change', recalculate);
   // Shift forward button
-  shift_forward = document.getElementById('shift_forward');
+  const shift_forward = document.getElementById('shift_forward');
   shift_forward.addEventListener('click', shiftForward);
   // Shift backward button
-  shift_backward = document.getElementById('shift_backward');
+  const shift_backward = document.getElementById('shift_backward');
   shift_backward.addEventListener('click', shiftBackward);
   // Shuffle button
-  shuffle_button = document.getElementById('shuffle_cells');
+  const shuffle_button = document.getElementById('shuffle_cells');
   shuffle_button.addEventListener('click', shuffleCells);
 
   // Save to JSON.
@@ -266,9 +266,9 @@ function registerEventHandlers () {
 function formatNum (number) {
   const nSigFig = document.getElementById('significant_figures').value;
   if (Math.abs(number) > 1e-4 && Math.abs(number) < 1e4) {
-    var rounded = number.toPrecision(nSigFig);
+    rounded = number.toPrecision(nSigFig);
   } else {
-    var rounded = number.toExponential(nSigFig - 1);
+    rounded = number.toExponential(nSigFig - 1);
   }
   return rounded;
 }
@@ -277,7 +277,7 @@ function recalculate () {
   const P = {};
 
   const cells = document.getElementsByClassName('cell');
-  for (elem of cells) {
+  for (const elem of cells) {
     const numElem = document.getElementById(elem.id + 'num');
     P[elem.id] = numElem.value / 100;
   }
@@ -304,7 +304,7 @@ function recalculate () {
   const nOptions = bingoOptions.length;
   for (let i = 0; i < nOptions; i++) {
     const this_option = bingoOptions[i];
-    var this_P = P_out[this_option];
+    const this_P = P_out[this_option];
     P_none *= 1 - this_P;
   }
   const P_any = 1.0 - P_none;
@@ -313,9 +313,9 @@ function recalculate () {
   const rounding_on = document.getElementById('rounding_on').checked;
 
   const elements = document.getElementsByClassName('num-output');
-  for (elem of elements) {
+  for (const elem of elements) {
     if (P_out[elem.id] != null) {
-      var this_P = P_out[elem.id];
+      const this_P = P_out[elem.id];
       const rawPercent = 100 * this_P;
       if (rounding_on === true) {
         elem.value = formatNum(rawPercent);
