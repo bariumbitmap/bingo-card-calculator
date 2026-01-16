@@ -217,6 +217,7 @@ function importFile (evt) {
     }
   }
   saveStatetoURL();
+  recalculate();
 }
 function readFile (evt) {
   const fileList = evt.target.files;
