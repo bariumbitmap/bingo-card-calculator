@@ -7,6 +7,7 @@ Development
 - [x] Load from JSON file
 - [x] Button to Shift / Permute
 - [x] Button to Shuffle
+- [ ] Dark mode
 
 Testing
 - [x] desktop Firefox on Linux
